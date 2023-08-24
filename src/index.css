@@ -120,4 +120,5 @@ nav .active {
   background-color: #ff7038;
   color: #fff;
   cursor: pointer;
+  border-radius: 8px;
 }

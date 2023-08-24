@@ -1,19 +1,17 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
+import { BsPerson, BsTelephone, BsPin } from "react-icons/bs";
 import {
-  BsPerson,
-  BsEnvelope,
-  BsTelephone,
-  BsPin,
-  BsLock,
-  BsEye,
-  BsEyeSlash,
-} from "react-icons/bs";
+  PasswordInput,
+  passwordValidationSchema,
+} from "../components/inputs/PasswordInput";
+import {
+  emailValidationSchema,
+  EmailInput,
+} from "../components/inputs/EmailInput";
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
     firstname: "",
     lastname: "",
@@ -30,9 +28,7 @@ const Register = () => {
   const validationSchema = Yup.object({
     firstname: Yup.string().required("Toto pole nesmí být prázdné"),
     lastname: Yup.string().required("Toto pole nesmí být prázdné"),
-    email: Yup.string()
-      .required("Toto pole nesmí být prázdné")
-      .email("Zadejte platný e-mail"),
+    email: emailValidationSchema.fields.email,
     phone: Yup.string()
       .required("Toto pole nesmí být prázdné")
       .matches(
@@ -50,12 +46,7 @@ const Register = () => {
         /^\d{8}$/,
         "Zadejte platné identifikační číslo (formát: 8 číslic)"
       ),
-    password: Yup.string()
-      .required("Toto pole nesmí být prázdné")
-      .matches(
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/,
-        "Heslo musí obsahovat alespoň 8 znaků včetně malých a velkých písmen, číslic a speciálního znaku"
-      ),
+    password: passwordValidationSchema.fields.password,
   });
 
   const handleSubmit = (values) => {
@@ -107,24 +98,7 @@ const Register = () => {
                 className="error-message"
               />
             </div>
-            <div>
-              <div className="inputContainer">
-                <BsEnvelope className="inputIcon" size={21} />
-                <Field
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="inputField"
-                  placeholder="E-mail"
-                />
-              </div>
-
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="error-message"
-              />
-            </div>
+            <EmailInput />
             <div>
               <div className="inputContainer">
                 <BsTelephone className="inputIcon" size={21} />
@@ -224,36 +198,7 @@ const Register = () => {
                 />
               </div>
             </div>
-            <div>
-              <div className="inputContainer">
-                <BsLock className="inputIcon" size={21} />
-                <Field
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  id="password"
-                  className="inputField"
-                  placeholder="Heslo"
-                />
-                {showPassword ? (
-                  <BsEyeSlash
-                    className="showPassword"
-                    size={21}
-                    onClick={() => setShowPassword(!showPassword)}
-                  />
-                ) : (
-                  <BsEye
-                    className="showPassword"
-                    size={21}
-                    onClick={() => setShowPassword(!showPassword)}
-                  />
-                )}
-              </div>
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="error-message"
-              />
-            </div>
+            <PasswordInput />
             <button className="formButton" type="submit">
               REGISTER
             </button>
