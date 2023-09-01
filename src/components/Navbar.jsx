@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 
-const Navbar = () => {
+const Navbar = ({isAdmin}) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   return (
     <nav>
       <div className="navbar">
@@ -10,8 +13,19 @@ const Navbar = () => {
           </NavLink>
         </div>
         <div className="navbar-items">
-          <NavLink to="/register">Register</NavLink>
-          <NavLink to="/login">Login</NavLink>
+          {isLoggedIn ? (
+            <>
+            <NavLink to="/product">Produkty</NavLink>
+            <NavLink to="/commission">Provize</NavLink>
+            {isAdmin && <NavLink to="/product-approval">Produkty na schválení</NavLink>}
+            </>
+          ) : (
+            <>
+            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/login">Login</NavLink>
+            </>
+          )
+          }
         </div>
       </div>
     </nav>

@@ -1,8 +1,9 @@
 /* COLORS */
-/* gray -  #666*/
-/* lightGreay - #ededed */
-/* orange - #ff7038 */
-:root,
+:root {
+  --gray: #666;
+  --lightGray: #ededed;
+  --orange: #ff7038;
+}
 html,
 body {
   height: 100%;
@@ -21,13 +22,14 @@ body {
 
 /* NAVBAR STYLES */
 nav {
-  background-color: #666;
+  background-color: var(--gray);
 }
 .navbar {
   width: 90%;
   margin: auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 30px;
   padding: 15px 0;
 }
@@ -43,8 +45,9 @@ nav {
 nav .active {
   text-decoration: underline;
   text-underline-offset: 8px;
-  color: #ff7038;
+  color: var(--orange);
 }
+
 
 /* FORM STYLE */
 .FormPage {
@@ -74,7 +77,7 @@ nav .active {
   position: absolute;
   left: 3px;
   padding-left: 3px;
-  color: #c9c9c9;
+  color: var(--lightGray);
 }
 .showPassword {
   position: absolute;
@@ -89,7 +92,6 @@ nav .active {
   border: 1px solid #e5e5e8;
   margin: 8px 0;
   color: black;
-  font-size: 0.8em;
   font-weight: 500;
   box-sizing: border-box;
   padding-left: 33px;
@@ -97,9 +99,8 @@ nav .active {
 }
 .inputField:focus {
   outline: none;
-  border: 1px solid #ff7038;
+  border: 1px solid var(--orange);
 }
-
 .inputField::placeholder {
   color: rgb(80, 80, 80);
   font-size: 1em;
@@ -108,7 +109,6 @@ nav .active {
 .error-message {
   color: red;
   font-size: 12px;
-  margin-top: -8px;
   text-align: center;
 }
 .formButton {
@@ -117,8 +117,99 @@ nav .active {
   font-size: 16px;
   padding: 10px 0;
   border: none;
-  background-color: #ff7038;
+  background-color: var(--orange);
   color: #fff;
   cursor: pointer;
   border-radius: 8px;
+}
+
+/* PRODUCT TABLE STYLE */
+table {
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+table * {
+  position: relative;
+}
+table td, table th {
+  padding-left: 8px;
+}
+table thead tr {
+  height: 60px;
+  background: var(--orange);
+  font-size: 16px;
+}
+table tbody tr {
+  height: 48px;
+  border-bottom: 1px solid var(--gray);
+}
+table tbody tr:last-child {
+  border: 0;
+}
+table td, table th {
+  text-align: left;
+}
+table td.l, table th.l {
+  text-align: right;
+}
+table td.c, table th.c {
+  text-align: center;
+}
+table td.r, table th.r {
+  text-align: center;
+}
+
+@media screen and (max-width: 35.5em) {
+  table {
+    display: block;
+  }
+  table > *, table tr, table td, table th {
+    display: block;
+  }
+}
+
+.emptyData {
+  background-color: var(--orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 33px;
+}
+
+/* PRODUCT DETAIL STYLES */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+  display: flex;
+}
+.left-column {
+  width: 65%;
+}
+ 
+.right-column {
+  width: 35%;
+  margin-top: 60px;
+}
+.approved {
+  background-color: green;
+}
+.waiting {
+  background-color: var(--orange);
+}
+.state {
+  text-align: center;
+  padding: 15px 20px;
+  border-radius: 30px;
+  color: white;
+  font-size: 20px;
+  margin-left: 10px;
 }
