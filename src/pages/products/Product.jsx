@@ -10,9 +10,6 @@ const Product = () => {
       console.log("smazano");
     }
   };
-  const handleEdit = (id) => {
-    
-  };
 
   return (
     <div>
