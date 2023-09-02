@@ -1,6 +1,5 @@
 import { useSearchParams } from "react-router-dom";
 import products from "../../sample-data/products";
-import { useState } from "react";
 
 const DetailProduct = ({isAdmin}) => {
   const [queryParams] = useSearchParams();
@@ -45,7 +44,9 @@ const DetailProduct = ({isAdmin}) => {
             <div className="product-color">
               <span>Color</span>
               <br />
-              {product.color}
+              {product.color.map((color, i) => (
+                <span key={i}>{color}, </span>
+              ))}
             </div>
           </div>
           <br />

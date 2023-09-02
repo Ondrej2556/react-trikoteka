@@ -16,7 +16,7 @@ const ProductForm = ({ type, product }) => {
     image: product?.imageUrl || null,
     title: product?.title || "",
     description: product?.description || "",
-    color: product?.color || null,
+    color: product?.color || [],
     category: product?.categories || [],
     keywords: product?.keywords || [],
     version: product ? "edited" : "new",
@@ -32,7 +32,7 @@ const ProductForm = ({ type, product }) => {
     image: Yup.mixed().required("File is required"),
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
-    color: Yup.string().required("Please select a color"),
+    color: Yup.array().min(1, "Colors are required"),
     category: Yup.array().min(1, "Category are required"),
     keywords: Yup.array().min(1, "Keywords are required"),
   });
@@ -128,6 +128,7 @@ const ProductForm = ({ type, product }) => {
                     autoHighlight
                     id="color"
                     name="color"
+                    multiple
                     defaultValue={initialValues.color}
                     options={colors}
                     renderTags={(value, getTagProps) =>
