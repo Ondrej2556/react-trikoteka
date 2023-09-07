@@ -10,24 +10,26 @@ import {
   emailValidationSchema,
   EmailInput,
 } from "../components/inputs/EmailInput";
+import { registerUser } from "../api/userApi";
 
 const Register = () => {
   const initialValues = {
-    firstname: "",
-    lastname: "",
+    name: "",
+    surname: "",
     email: "",
     phone: "",
-    address: "",
-    postalCode: "",
-    state: "",
-    ic: "",
-    dic: "",
+    street: "",
+    zipCode: "",
+    city: "",
+    country: "",
+    bussinessId: "",
+    taxId: "",
     password: "",
   };
 
   const validationSchema = Yup.object({
-    firstname: Yup.string().required("Toto pole nesmí být prázdné"),
-    lastname: Yup.string().required("Toto pole nesmí být prázdné"),
+    name: Yup.string().required("Toto pole nesmí být prázdné"),
+    surname: Yup.string().required("Toto pole nesmí být prázdné"),
     email: emailValidationSchema.fields.email,
     phone: Yup.string()
       .required("Toto pole nesmí být prázdné")
@@ -35,12 +37,13 @@ const Register = () => {
         /^\+420\d{9}$/,
         "Zadejte platné telefonní číslo (formát: +420123456789)"
       ),
-    address: Yup.string().required("Toto pole nesmí být prázdné"),
-    postalCode: Yup.string()
+    street: Yup.string().required("Toto pole nesmí být prázdné"),
+    zipCode: Yup.string()
       .required("Toto pole nesmí být prázdné")
       .matches(/^\d{5}$/, "Zadejte platný poštovní kód (formát: 11111)"),
-    state: Yup.string().required("Toto pole nesmí být prázdné"),
-    ic: Yup.string()
+    city: Yup.string().required("Toto pole nesmí být prázdné"),
+    country: Yup.string().required("Toto pole nesmí být prázdné"),
+    bussinessId: Yup.string()
       .required("Toto pole nesmí být prázdné")
       .matches(
         /^\d{8}$/,
@@ -49,9 +52,12 @@ const Register = () => {
     password: passwordValidationSchema.fields.password,
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     // Handle form submission
-    console.log(values);
+    const user = await registerUser(values)
+    console.log(user);
+
+    //save user token to localstorage / cookies
   };
 
   return (
@@ -69,14 +75,14 @@ const Register = () => {
                 <BsPerson className="inputIcon" size={21} />
                 <Field
                   type="text"
-                  name="firstname"
-                  id="firstname"
+                  name="name"
+                  id="name"
                   className="inputField"
                   placeholder="Jméno"
                 />
               </div>
               <ErrorMessage
-                name="firstname"
+                name="name"
                 component="p"
                 className="error-message"
               />
@@ -86,14 +92,14 @@ const Register = () => {
                 <BsPerson className="inputIcon" size={21} />
                 <Field
                   type="text"
-                  name="lastname"
-                  id="lastname"
+                  name="surname"
+                  id="surname"
                   className="inputField"
                   placeholder="Příjmení"
                 />
               </div>
               <ErrorMessage
-                name="lastname"
+                name="surname"
                 component="p"
                 className="error-message"
               />
@@ -121,14 +127,14 @@ const Register = () => {
                 <BsPin className="inputIcon" size={21} />
                 <Field
                   type="text"
-                  name="address"
-                  id="address"
+                  name="street"
+                  id="street"
                   className="inputField"
                   placeholder="Ulice a č. p."
                 />
               </div>
               <ErrorMessage
-                name="address"
+                name="street"
                 component="div"
                 className="error-message"
               />
@@ -138,14 +144,31 @@ const Register = () => {
                 <BsPin className="inputIcon" size={21} />
                 <Field
                   type="text"
-                  name="postalCode"
-                  id="postalCode"
+                  name="zipCode"
+                  id="zipCode"
                   className="inputField"
                   placeholder="PSČ"
                 />
               </div>
               <ErrorMessage
-                name="postalCode"
+                name="zipCode"
+                component="div"
+                className="error-message"
+              />
+            </div>
+            <div>
+              <div className="inputContainer">
+                <BsPin className="inputIcon" size={21} />
+                <Field
+                  type="text"
+                  name="city"
+                  id="city"
+                  className="inputField"
+                  placeholder="Město"
+                />
+              </div>
+              <ErrorMessage
+                name="city"
                 component="div"
                 className="error-message"
               />
@@ -155,8 +178,8 @@ const Register = () => {
                 <BsPin className="inputIcon" size={21} />
                 <Field
                   as="select"
-                  name="state"
-                  id="state"
+                  name="country"
+                  id="country"
                   className="inputField"
                 >
                   <option value="">Stát</option>
@@ -164,7 +187,7 @@ const Register = () => {
                 </Field>
               </div>
               <ErrorMessage
-                name="state"
+                name="country"
                 component="div"
                 className="error-message"
               />
@@ -174,14 +197,14 @@ const Register = () => {
                 <BsPerson className="inputIcon" size={21} />
                 <Field
                   type="text"
-                  name="ic"
-                  id="ic"
+                  name="bussinessId"
+                  id="bussinessId"
                   className="inputField"
                   placeholder="IČO"
                 />
               </div>
               <ErrorMessage
-                name="ic"
+                name="bussinessId"
                 component="div"
                 className="error-message"
               />
@@ -191,8 +214,8 @@ const Register = () => {
                 <BsPerson className="inputIcon" size={21} />
                 <Field
                   type="text"
-                  name="dic"
-                  id="dic"
+                  name="taxId"
+                  id="taxId"
                   className="inputField"
                   placeholder="DIČ"
                 />

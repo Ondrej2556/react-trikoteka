@@ -1,15 +1,38 @@
 import { Link, useNavigate } from "react-router-dom";
 import ProductTable from "../../components/products/ProductTable";
-import products from "../../sample-data/products";
+import { deleteProductById, getAllProducts } from "../../api/productApi";
+import { useEffect, useState } from "react";
+import Loader from '../../components/loader/Loader'
 
 const Product = () => {
+  const [products, setProducts ] = useState([])
+  const [isLoading, setIsLoading ] = useState(true)
   const navigate = useNavigate()
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     console.log("delete", id);
     if (confirm("Opravdu chcete smazat?")) {
       console.log("smazano");
+      await deleteProductById(id)
     }
   };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await getAllProducts();
+        if (!products) {
+          setIsLoading(false);
+          return;
+        }
+        setProducts(products);
+        setIsLoading(false); 
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setIsLoading(false); 
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div>
@@ -27,7 +50,10 @@ const Product = () => {
       </Link>
       <br />
       <div>
-        <ProductTable
+        {isLoading ? (
+          <Loader />
+         ) : ( 
+          <ProductTable
           noProductMessage="Zatím nemáte žádné produkty"
           data={products}
           fields={["imageUrl", "title", "state", "action"]}
@@ -41,12 +67,14 @@ const Product = () => {
           customRender={{
             action: (item) => (
               <div>
-                <button onClick={() => navigate(`/product/edit?productId=${item.id}`)}>Edit</button>
-                <button onClick={() => handleDelete(item.id)}>Delete</button>
+                <button onClick={() => navigate(`/product/edit?productId=${item.uuid}`)}>Edit</button>
+                <button onClick={() => handleDelete(item.uuid)}>Delete</button>
               </div>
             ),
           }}
         />
+        )}
+        
       </div>
     </div>
   );

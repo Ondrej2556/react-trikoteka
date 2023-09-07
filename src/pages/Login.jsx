@@ -10,6 +10,7 @@ import {
   emailValidationSchema,
   EmailInput,
 } from "../components/inputs/EmailInput";
+import { loginUser } from "../api/userApi";
 
 const Login = () => {
   const initialValues = {
@@ -22,9 +23,10 @@ const Login = () => {
     password: passwordValidationSchema.fields.password,
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     // Handle form submission
-    console.log(values);
+    const user = await loginUser(values)
+    console.log(user);
   };
 
   return (

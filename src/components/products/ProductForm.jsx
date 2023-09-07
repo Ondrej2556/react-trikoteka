@@ -5,35 +5,68 @@ import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
+import { createProduct, uploadMedia } from "../../api/productApi";
+import {
+  getAllCategories,
+  getAllColors,
+  getAllKeywords,
+} from "../../api/productApi";
 
-const categories = ["Electronics", "Fashion", "Home & Kitchen", "Other"];
-const colors = ["Blue", "Red", "Green", "White", "Other"];
 
 const ProductForm = ({ type, product }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [colors, setColors] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [keywords, setKeywords] = useState([]);
 
-  const initialValues = {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categories = await getAllCategories();
+        const colors = await getAllColors();
+        const keywords = await getAllKeywords();
+        if (!categories || !colors || !keywords) {
+          return;
+        }
+        setCategories(categories);
+        setColors(colors);
+        setKeywords(keywords);
+        console.log(categories);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    if (product) {
+    }
+
+    fetchData();
+  }, []);
+
+  const [initialValues, setInitialValues] = useState({
     image: product?.imageUrl || null,
     title: product?.title || "",
     description: product?.description || "",
-    color: product?.color || [],
-    category: product?.categories || [],
+    colorIds: product?.colorIds || [],
+    categoryIds: product?.categoryIds || [],
     keywords: product?.keywords || [],
     version: product ? "edited" : "new",
-  };
+  });
+
 
   useEffect(() => {
     if (product) {
       setSelectedImage(product.imageUrl);
     }
+    console.log("INITIAL VALUELS", initialValues);
   }, [product]);
 
   const validationSchema = Yup.object({
     image: Yup.mixed().required("File is required"),
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
-    color: Yup.array().min(1, "Colors are required"),
-    category: Yup.array().min(1, "Category are required"),
+    colorIds: Yup.array().min(1, "Colors are required"),
+    categoryIds: Yup.array().min(1, "Category are required"),
     keywords: Yup.array().min(1, "Keywords are required"),
   });
 
@@ -57,10 +90,26 @@ const ProductForm = ({ type, product }) => {
     </div>
   );
 
-  const handleSubmit = (values) => {
-    // Handle form submission
+  const handleSubmit = async (values) => {
+    const { image, ...productData } = values;
+    const imageResult = await uploadMedia(values.image);
+    if (!imageResult) {
+      console.error("something went wrong uploading image.");
+      return;
+    }
+    const modifiedProductData = {
+      ...productData,
+      colorIds: productData.colorIds.map((color) => color.id),
+      categoryIds: productData.categoryIds.map((category) => category.id),
+      mediaId: imageResult.id,
+    };
 
-    console.log(values);
+    const product = await createProduct(modifiedProductData);
+    console.log(product);
+    if (!product) {
+      console.error("something went wrong creating product.");
+      return;
+    }
   };
 
   return (
@@ -126,16 +175,17 @@ const ProductForm = ({ type, product }) => {
                     type="text"
                     component={Autocomplete}
                     autoHighlight
-                    id="color"
-                    name="color"
+                    id="colorIds"
+                    name="colorIds"
                     multiple
-                    defaultValue={initialValues.color}
+                    defaultValue={initialValues.colorIds}
                     options={colors}
+                    getOptionLabel={(option) => option.name}
                     renderTags={(value, getTagProps) =>
                       value.map((option, index) => (
                         <Chip
                           variant="outlined"
-                          label={option}
+                          label={option.name}
                           {...getTagProps({ index })}
                         />
                       ))
@@ -147,11 +197,11 @@ const ProductForm = ({ type, product }) => {
                         label="Zvolte barvu"
                       />
                     )}
-                    onChange={(_, value) => setFieldValue("color", value)}
+                    onChange={(_, value) => setFieldValue("colorIds", value)}
                   />
                 </div>
                 <ErrorMessage
-                  name="color"
+                  name="colorIds"
                   component="p"
                   className="error-message"
                 />
@@ -162,21 +212,21 @@ const ProductForm = ({ type, product }) => {
               <div>
                 <div className="inputContainer">
                   <Field
-                    id="category"
-                    name="category"
+                    id="categoryIds"
+                    name="categoryIds"
                     type="text"
                     fullWidth
                     autoHighlight
                     component={Autocomplete}
                     multiple
-                    defaultValue={initialValues.category}
+                    defaultValue={initialValues.categoryIds}
                     options={categories}
-                    freeSolo
+                    getOptionLabel={(option) => option.name}
                     renderTags={(value, getTagProps) =>
                       value.map((option, index) => (
                         <Chip
                           variant="outlined"
-                          label={option}
+                          label={option.name}
                           {...getTagProps({ index })}
                         />
                       ))
@@ -188,18 +238,20 @@ const ProductForm = ({ type, product }) => {
                         label="Kategorie"
                       />
                     )}
-                    onChange={(_, value) => setFieldValue("category", value)}
+                    onChange={(_, value) => {
+                      setFieldValue("categoryIds", value);
+                    }}
                   />
                 </div>
                 <ErrorMessage
-                  name="category"
+                  name="categoryIds"
                   component="p"
                   className="error-message"
                 />
               </div>
               <br />
 
-              {/* CATEGORY FIELD */}
+              {/* KEYWORDS FIELD */}
 
               <div>
                 <div className="inputContainer">
@@ -212,7 +264,8 @@ const ProductForm = ({ type, product }) => {
                     id="keywords"
                     name="keywords"
                     defaultValue={initialValues.keywords}
-                    options={categories}
+                    options={keywords}
+                    //getOptionLabel={(option) => option.name}
                     freeSolo
                     renderTags={(value, getTagProps) =>
                       value.map((option, index) => (

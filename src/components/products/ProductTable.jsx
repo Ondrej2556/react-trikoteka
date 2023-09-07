@@ -16,7 +16,7 @@ const ProductTable = ({
       ) : (
         <table>
           <thead>
-            <tr>
+            <tr key={fields}>
               {fields.map((field) => (
                 <th key={field}>{fieldNames[field]}</th>
               ))}
@@ -24,15 +24,17 @@ const ProductTable = ({
           </thead>
           <tbody>
             {data.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.uuid || item.id}>
                 {fields.map((field) => (
                   <td key={field}>
                     {field === "imageUrl" ? (
                       <img src={item[field]} alt={item.title} width="50" />
-                    ) : field === "title" ? (
-                      <Link to={`/product/detail?productId=${item.id}`}>
+                    ) : (field === "title") || (field === "name") ? (
+                      <Link to={`/product/detail?productId=${item.uuid || item.id}`}>
                         {item[field]}
                       </Link>
+                    ) : field === "state" ? (
+                      "Aktivní"
                     ) : customRender[field] ? (
                       customRender[field](item)
                     ) : (
