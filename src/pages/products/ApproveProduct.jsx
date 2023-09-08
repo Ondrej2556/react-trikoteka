@@ -58,7 +58,7 @@ const ApproveProduct = ({ isAdmin }) => {
               <div>
                 <button
                   onClick={() =>
-                    navigate(`/product/detail?productId=${item.id}`)
+                    navigate(`/product/detail?productId=${item.uuid}`)
                   }
                 >
                   Detail
