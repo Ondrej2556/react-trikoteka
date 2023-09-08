@@ -56,9 +56,9 @@ const Product = () => {
           <ProductTable
           noProductMessage="Zatím nemáte žádné produkty"
           data={products}
-          fields={["imageUrl", "title", "state", "action"]}
+          fields={["mediaId", "title", "state", "action"]}
           fieldNames={{
-            imageUrl: "Obrázek",
+            mediaId: "Obrázek",
             title: "Jméno",
             state: "Stav",
             author: "Autor",

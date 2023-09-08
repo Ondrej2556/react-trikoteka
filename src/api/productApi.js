@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const API_URL = "https://api.trikoteka.brainsov.com";
-const X_TOKEN = "EXAMPLE-TOKEN";
+const TOKEN = "EXAMPLE-TOKEN";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
+    "Authorization": `Bearer ${TOKEN}`
   },
 });
 
@@ -57,6 +58,10 @@ const createProduct = (productData) => {
   return axiosInstance.post("/product", productData);
 };
 
+const editProductById = (productId, productData) => {
+  return axiosInstance.put(`/product/${productId}`, productData)
+}
+
 export {
   getAllProducts,
   getAllColors,
@@ -65,5 +70,6 @@ export {
   createProduct,
   getAllKeywords,
   getProductById,
-  deleteProductById
+  deleteProductById,
+  editProductById
 };

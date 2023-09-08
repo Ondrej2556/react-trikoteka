@@ -45,9 +45,9 @@ const ApproveProduct = ({ isAdmin }) => {
         <ProductTable
           noProductMessage="Žádné produkty pro schválení"
           data={productsToDisplay}
-          fields={["imageUrl", "title", "state", "uuid", "action"]}
+          fields={["mediaId", "title", "state", "uuid", "action"]}
           fieldNames={{
-            imageUrl: "Obrázek",
+            mediaId: "Obrázek",
             title: "Jméno",
             state: "Stav",
             uuid: "Autor",

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ProductImage from "./ProductImage";
 
 const ProductTable = ({
   data,
@@ -27,8 +28,8 @@ const ProductTable = ({
               <tr key={item.uuid || item.id}>
                 {fields.map((field) => (
                   <td key={field}>
-                    {field === "imageUrl" ? (
-                      <img src={item[field]} alt={item.title} width="50" />
+                    {field === "mediaId" ? (
+                      <ProductImage mediaUrl={item[field]} alt={item.title} width="50"/>
                     ) : (field === "title") || (field === "name") ? (
                       <Link to={`/product/detail?productId=${item.uuid || item.id}`}>
                         {item[field]}
